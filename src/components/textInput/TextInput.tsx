@@ -1,24 +1,50 @@
-import { FieldHookConfig, useField } from 'formik'
-import { ComponentPropsWithRef, FC } from 'react';
+import { useState } from "react";
+import { FieldHookConfig, useField } from "formik";
+import { ComponentPropsWithRef, FC } from "react";
 
-interface TextInputProps extends ComponentPropsWithRef<'input'> {
-  label: string, 
+interface TextInputProps extends ComponentPropsWithRef<"input"> {
+  label: string;
+  type: string;
+  isPassword: boolean;
 }
 
-const TextInput: FC<FieldHookConfig<string> & TextInputProps> = ({ label, ...props })=> {
-  // useField() returns [formik.getFieldProps(), formik.getFieldMeta()]
-  // which we can spread on <input>. We can use field meta to show an error
-  // message if the field is invalid and it has been touched (i.e. visited)
+const TextInput: FC<FieldHookConfig<string> & TextInputProps> = ({
+  label,
+  type,
+  isPassword,
+  ...props
+}) => {
+  const [charVisible, setCharVisible] = useState(true);
   const [field, meta] = useField(props);
   return (
-    <>
-      <label htmlFor={props.id || props.name}>{label}</label>
-      <input className="text-input" {...field} {...props} />
+    <div className="flex flex-col min-h-20 w-fit m-2">
+      <label
+        htmlFor={props.id || props.name}
+        className="text-gray-900 font-bold"
+      >
+        {label}
+      </label>
+      <div className="inline">
+        <input
+          className="text-input box-border border-b-2"
+          {...field}
+          {...props}
+          type={charVisible ? "text" : "password"}
+        />
+        {isPassword && (
+          <input
+            type="checkbox"
+            value={`${charVisible}`}
+            onChange={() => setCharVisible(!charVisible)}
+            className="w-fit"
+          />
+        )}
+      </div>
       {meta.touched && meta.error ? (
-        <div className="error">{meta.error}</div>
+        <div className="error text-red-600">{meta.error}</div>
       ) : null}
-    </>
+    </div>
   );
 };
 
-export default TextInput
+export default TextInput;
