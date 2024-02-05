@@ -11,6 +11,11 @@ interface SignupFormProps {
     password: string,
     password2: string
   ) => {};
+  data: any;
+}
+
+interface Data  {
+  token: {token: string, refresh: string}
 }
 
 const validationSchema = Yup.object({
@@ -36,14 +41,14 @@ const SignupForm = ({ request }: SignupFormProps) => {
       initialValues={{ username: "", email: "", password: "", password2: "" }}
       validationSchema={validationSchema}
       onSubmit={async (values, { setSubmitting }) => {
-        const data = await request(
+        const data:{token?:object} = await request(
           values.username,
           values.email,
           values.password,
           values.password2
         );
         if (data) {
-          localStorage.setItem('token', JSON.stringify(data));
+          localStorage.setItem('token', JSON.stringify(data.token));
           return navigate('/user/dashboard') 
         }
       }}

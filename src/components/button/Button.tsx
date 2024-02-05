@@ -1,12 +1,13 @@
 interface MyButtonProps {
-  text: string, 
-  type: "submit" | "reset",
+  text: string;
+  type: "submit" | "reset";
+  handleClick?: () => void;
 }
 
-const Button = ({ text, type }: MyButtonProps) => {
+const Button = ({ text, type, handleClick}: MyButtonProps) => {
   return (
     <>
-      <button type={type}>{text}</button>
+      <button onClick={handleClick} type={type}>{text}</button>
     </>
   );
 };

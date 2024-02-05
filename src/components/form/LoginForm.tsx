@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import TextInput from "../textInput/TextInput";
 import Button from "../button/Button";
 
-interface SignupFormProps {
+interface LoginFormProps {
   request: (email: string, password: string) => {};
   email: any;
 }
@@ -17,7 +17,7 @@ const validationSchema = Yup.object({
   .matches(/[a-zA-Z]/, "Password can only contain Latin letters."),
 });
 
-const SignupForm = ({ request }: SignupFormProps) => {
+const LoginForm = ({ request }: LoginFormProps) => {
   const navigate = useNavigate();
   
   return (
@@ -46,4 +46,4 @@ const SignupForm = ({ request }: SignupFormProps) => {
   );
 };
 
-export default SignupForm;
+export default LoginForm;
