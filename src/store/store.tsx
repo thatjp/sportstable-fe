@@ -1,9 +1,12 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from '../features/counterSlice'
+import globalReducer from '../features/globalSlice'
 
+export type IRootState = ReturnType<typeof store.getState>
 
 export const store = configureStore({
   reducer: {
+    global: globalReducer,
     counter: counterReducer,
   },
 })

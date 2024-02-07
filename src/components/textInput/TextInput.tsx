@@ -3,7 +3,7 @@ import { FieldHookConfig, useField } from "formik";
 import { ComponentPropsWithRef, FC } from "react";
 
 interface TextInputProps extends ComponentPropsWithRef<"input"> {
-  label: string;
+  label?: string;
   type: string;
   isPassword: boolean;
 }
@@ -28,7 +28,6 @@ const TextInput: FC<FieldHookConfig<string> & TextInputProps> = ({
         <input
           className="text-input box-border border-b-2"
           {...field}
-          {...props}
           type={charVisible ? "text" : "password"}
         />
         {isPassword && (
