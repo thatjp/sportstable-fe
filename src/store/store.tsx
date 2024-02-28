@@ -1,6 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterReducer from '../features/counterSlice'
 import globalReducer from '../features/globalSlice'
+import teamReducer from '../features/teamsSlice'
+import teamGamesReducer from '../features/teamGamesSlice'
 
 export type IRootState = ReturnType<typeof store.getState>
 
@@ -8,6 +10,8 @@ export const store = configureStore({
   reducer: {
     global: globalReducer,
     counter: counterReducer,
+    team: teamReducer,
+    teamGames: teamGamesReducer,
   },
 })
 

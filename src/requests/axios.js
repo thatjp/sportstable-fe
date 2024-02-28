@@ -46,3 +46,31 @@ export const logout = async (accessToken, refreshToken) => {
     console.error(error);
   }
 }
+
+export const getNbaTeams = async (accessToken) => {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/nba/teams`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if (response.status === 200) {
+      return response.data
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
+
+export const getNbaTeamGames = async (accessToken, teamId) => {
+  try {
+    const response = await axios.get(`http://127.0.0.1:8000/nba/teams/games/${teamId}`,
+    {
+      headers: { Authorization: `Bearer ${accessToken}` }
+    });
+    if (response.status === 200) {
+      return response.data
+    }
+  } catch (error) {
+    console.error(error);
+  }
+}
