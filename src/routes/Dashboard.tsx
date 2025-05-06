@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import NavBar from "../components/navbar/NavBar";
 import SideBar from "../components/sideBar.js/SideBar";
@@ -8,36 +8,43 @@ import { setSideBarOpen } from "../features/globalSlice";
 import { addTeams } from "../features/teamsSlice";
 import { addTeamGames } from "../features/teamGamesSlice";
 import Table from "../components/table/Table";
-import{ getNbaTeams, getNbaTeamGames } from '../requests/axios'
+import { MLBGame } from "../types/MLBTypes";
+import {
+  getNbaTeams,
+  getNbaTeamGames,
+  getLastWeeksGames,
+} from "../requests/axios";
 
 const Dashboard = () => {
+  const [games, setGames] = useState<[MLBGame][] | null>();
+
   const dispatch = useDispatch();
   const sidebarOpen = useSelector<IRootState, boolean>(
     (state) => state.global.sidebarOpen
   );
   const teamGames = useSelector<IRootState, {}>(
-    (state) => state.teamGames.games 
-  )
+    (state) => state.teamGames.games
+  );
 
   const handleChevronClick = () => {
     dispatch(setSideBarOpen());
   };
 
   useEffect(() => {
-    let token: any = localStorage.getItem('token')
-    token = JSON.parse(token)
-    
-    const getTeams = async () => {
-      const teams = await getNbaTeams(token.access)
-      const games = await getNbaTeamGames(token.access, 1610612737)
-      dispatch(addTeams(teams))
-      dispatch(addTeamGames(games)) 
-      return teams
-    }
-    getTeams()
-  }, [])
-  
+    let token: any = localStorage.getItem("token");
+    token = JSON.parse(token);
 
+    const getTeams = async () => {
+      const teams = await getNbaTeams(token.access);
+      const games = await getNbaTeamGames(token.access, 1610612737);
+      const MLBGames = await getLastWeeksGames(token.access);
+      setGames(MLBGames);
+      dispatch(addTeams(teams));
+      dispatch(addTeamGames(games));
+      return teams;
+    };
+    getTeams();
+  }, [dispatch]);
 
   return (
     <div className="flex">
@@ -53,11 +60,49 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="flex-1">
-        <NavBar />
-      {teamGames && <Table teamGames={teamGames} />}
+        <>
+          <NavBar />
+          {teamGames && <Table teamGames={teamGames} />}
+
+          {games &&
+            games.map((day: [MLBGame], idx: number) => {
+              return (
+                <div className="flex">
+                  {idx}
+                  {day.map((game: MLBGame) => (
+                    <div>
+                      {game.game_date}
+                      <br></br>
+                      {game.home_name} at {game.away_name}
+                      ____________________________________
+                      <div>
+                        <h3>Total</h3>
+                        {game.away_score + game.home_score}
+                        ______________________________________
+                        <span>{game.away_score}</span> -
+                        <span>{game.home_score}</span>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              );
+            })}
+        </>
       </div>
     </div>
   );
 };
+
+/**
+ * table
+ * 
+ * table head - data should be formatted to match the table head
+ * 
+ * table body - current data is okay
+ * 
+ * 
+ * table footer
+ */
+
 
 export default Dashboard;

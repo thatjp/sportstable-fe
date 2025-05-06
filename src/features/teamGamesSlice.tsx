@@ -18,7 +18,6 @@ export const teamGamesSlice = createSlice({
       action?.payload?.resultSets[0]?.rowSet?.forEach((element: any, idx: any) => {
         let obj: any = {};
         action.payload.resultSets[0].headers?.forEach((k: any, i: any) => {
-          console.log(k)
           obj[k] = element[i];
         });
         arr.push(obj);
