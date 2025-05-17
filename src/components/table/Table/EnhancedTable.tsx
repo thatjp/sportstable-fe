@@ -10,7 +10,7 @@ import {
   ColumnFiltersState,
 } from "@tanstack/react-table";
 import { useState, ChangeEvent } from "react";
-import { Input } from "../ui/input";
+import { Input } from "../../ui/input";
 
 type Game = {
   SEASON_ID: string;

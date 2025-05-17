@@ -7,7 +7,7 @@ import Icon from "../components/icon/Icon";
 import { setSideBarOpen } from "../features/globalSlice";
 import { addTeams } from "../features/teamsSlice";
 import { addTeamGames } from "../features/teamGamesSlice";
-import Table from "../components/table/Table";
+import Table from "../components/table/Table/Table";
 import { MLBGame } from "../types/MLBTypes";
 import {
   getNbaTeams,
@@ -16,7 +16,7 @@ import {
 } from "../requests/axios";
 
 const Dashboard = () => {
-  const [games, setGames] = useState<[MLBGame][] | null>();
+  const [games, setGames] = useState<MLBGame[] | null>();
 
   const dispatch = useDispatch();
   const sidebarOpen = useSelector<IRootState, boolean>(
@@ -65,25 +65,30 @@ const Dashboard = () => {
           {teamGames && <Table teamGames={teamGames} />}
 
           {games &&
-            games.map((day: [MLBGame], idx: number) => {
+            games.map((day: MLBGame, idx: number) => {
               return (
                 <div className="flex">
-                  {idx}
-                  {day.map((game: MLBGame) => (
+                  <h2>{idx}</h2>
+                  
+                  {/* {day.map((game: MLBGame) => ( */}
+                  <div>
+                    {new Date(day.game_datetime).toLocaleDateString()}
+                    <br />
+                    {day.home_name} at {day.away_name}
+                    <br />
+                    ____________________________________
+                    <br />
                     <div>
-                      {game.game_date}
-                      <br></br>
-                      {game.home_name} at {game.away_name}
-                      ____________________________________
-                      <div>
-                        <h3>Total</h3>
-                        {game.away_score + game.home_score}
-                        ______________________________________
-                        <span>{game.away_score}</span> -
-                        <span>{game.home_score}</span>
-                      </div>
+                      <h3>Total</h3>
+                      {day.away_score + day.home_score}
+                      <br />
+                      ______________________________________
+                      <br />
+                      <span>{day.away_score}</span> -
+                      <span>{day.home_score}</span>
                     </div>
-                  ))}
+                  </div>
+                  {/* ))} */}
                 </div>
               );
             })}
@@ -92,17 +97,5 @@ const Dashboard = () => {
     </div>
   );
 };
-
-/**
- * table
- * 
- * table head - data should be formatted to match the table head
- * 
- * table body - current data is okay
- * 
- * 
- * table footer
- */
-
 
 export default Dashboard;
